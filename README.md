@@ -2,11 +2,15 @@
 ## package apk
 
 #Let’s run an alpine container in interactive mode to build our package. The tmp host directory is mapped to the packager user home directory.
+
 <code data-enlighter-language="raw" class="EnlighterJSRAW">podman run --rm -it -v "$(pwd)/tmp:/home/packager" alpine:3.15 sh</code>
 
-# then open an sh as packager user
+ then open an sh as packager user
+
 <code data-enlighter-language="raw" class="EnlighterJSRAW">sudo -u packager sh</code>
-#Now generate a pair of keys. Follow this step only for the first package as we can reuse the same keys for all other packages we need to build.
+
+Now generate a pair of keys. Follow this step only for the first package as we can reuse the same keys for all other packages we need to build.
+
 <code data-enlighter-language="raw" class="EnlighterJSRAW">abuild-keygen -a -i</code>
 
     ~/.abuild $ pwd
@@ -17,13 +21,17 @@
     -rw-------    1 packager packager      1679 Jan 15 04:57 packager-63c387b1.rsa
     -rw-r--r--    1 packager packager       451 Jan 15 04:57 packager-63c387b1.rsa.pub
 
-#Now need something to build, so let’s quickly create a APKBUILD file to build reposerve :
-#/home/packager/glibc/main/glibc/APKBUILD
+Now need something to build, so let’s quickly create a APKBUILD file to build reposerve :
+/home/packager/glibc/main/glibc/APKBUILD
+
 <code data-enlighter-language="raw" class="EnlighterJSRAW">cd /home/packager/glibc/main/glibc</code>
-# REPODEST is set to add an additional level
-# in package directories to represent alpine version
+
+REPODEST is set to add an additional level
+in package directories to represent alpine version
+
 <code data-enlighter-language="raw" class="EnlighterJSRAW">REPODEST=~/packages/3.16 abuild -r</code>
-#and after a few minutes you should have the reposerve binary packaged in /home/packager/packages/3.16/main/aarch64/.apk
+
+and after a few minutes you should have the reposerve binary packaged in /home/packager/packages/3.16/main/aarch64/.apk
 
 ## Build docker
     FROM alpine:3.15
